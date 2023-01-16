@@ -7,10 +7,9 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentServiceImpl;
 
 import java.util.Collection;
-import java.util.Collections;
 
 @RestController
-@RequestMapping("Student")
+@RequestMapping("student")
 public class StudentController {
 
     private final StudentServiceImpl studentService;
@@ -19,12 +18,12 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @PostMapping
+    @PostMapping //POST http://localhost:8080/student
     public Student addStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
-    @GetMapping(path = "{id}")
+    @GetMapping(path = "{id}") //GET http://localhost:8080/student/2
     public ResponseEntity<Student> findStudent(@PathVariable long id) {
         Student student = studentService.findStudent(id);
         if (student == null) {
@@ -33,7 +32,7 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @PutMapping
+    @PutMapping //PUT http://localhost:8080/student
     public ResponseEntity<Student> editStudent(@RequestBody Student student) {
         Student foundStudent = studentService.editStudent(student);
         if (foundStudent == null) {
@@ -42,21 +41,18 @@ public class StudentController {
         return ResponseEntity.ok(foundStudent);
     }
 
-    @DeleteMapping(path = "{id}")
+    @DeleteMapping(path = "{id}")  //DELETE http://localhost:8080/student/2
     public Student deleteStudent(@PathVariable long id) {
         return studentService.deleteStudent(id);
     }
 
-    @GetMapping
+    @GetMapping //GET http://localhost:8080/student
     public ResponseEntity<Collection<Student>> getAllFaculties() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
-    @GetMapping(path = "/filter/{age}")
+    @GetMapping(path = "/filter/{age}") //GET http://localhost:8080/student/filter/25
     public ResponseEntity<Collection<Student>> filterForAge(@PathVariable int age) {
-        if (age > 0) {
             return ResponseEntity.ok(studentService.filterForAge(age));
         }
-        return ResponseEntity.ok(Collections.emptyList());
-    }
 }
