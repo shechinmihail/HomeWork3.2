@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Objects;
 
-@Entity(name = "any_positon")
+@Entity
 public class Faculty {
     @Id
     @GeneratedValue
