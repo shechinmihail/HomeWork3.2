@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 
 import java.util.Collection;
 
@@ -16,5 +17,7 @@ public interface FacultyService {
 
     Collection<Faculty> getAllFaculties();
 
-    Collection<Faculty> filterForColor(String color);
+    Faculty findByNameOrColor(String name, String color);
+
+    Collection<Student> findStudentsById(long id);
 }
