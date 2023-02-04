@@ -9,7 +9,7 @@ import java.util.Collection;
 public interface AvatarService {
     public void upLoadAvatar(Long studentId, MultipartFile file) throws IOException;
     public Avatar downLoadAvatar(Long id);
-    public Collection<Avatar> getAllAvatars();
+    public Collection<Avatar> getAllAvatars(Integer pageNumber, Integer pageSize);
     public Avatar editAvatar(Avatar avatar);
     public void deleteAvatar(Long id);
 }

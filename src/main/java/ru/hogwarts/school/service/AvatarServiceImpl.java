@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
@@ -11,11 +12,10 @@ import javax.imageio.ImageIO;
 import javax.transaction.Transactional;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Collection;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -62,19 +62,19 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private byte[] generateImageData(Path filePath) throws IOException {
-    try (InputStream is = Files.newInputStream(filePath);
-        BufferedInputStream bis = new BufferedInputStream(is,1024);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream()){
-        BufferedImage image = ImageIO.read(bis);
+        try (InputStream is = Files.newInputStream(filePath);
+             BufferedInputStream bis = new BufferedInputStream(is, 1024);
+             ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+            BufferedImage image = ImageIO.read(bis);
 
-        int height = image.getHeight()/(image.getWidth()/100);
-        BufferedImage data = new BufferedImage(100,height,image.getType());
-        Graphics2D graphics = data.createGraphics();
-        graphics.drawImage(image,0,0,100,height,null);
-        graphics.dispose();
+            int height = image.getHeight() / (image.getWidth() / 100);
+            BufferedImage data = new BufferedImage(100, height, image.getType());
+            Graphics2D graphics = data.createGraphics();
+            graphics.drawImage(image, 0, 0, 100, height, null);
+            graphics.dispose();
 
-        ImageIO.write(data,getExtension(filePath.getFileName().toString()),baos);
-        return baos.toByteArray();
+            ImageIO.write(data, getExtension(filePath.getFileName().toString()), baos);
+            return baos.toByteArray();
         }
     }
 
@@ -82,10 +82,12 @@ public class AvatarServiceImpl implements AvatarService {
     public Avatar downLoadAvatar(Long studentId) {
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
+
     @Transactional
     @Override
-    public Collection<Avatar> getAllAvatars() {
-        return avatarRepository.findAll();
+    public Collection<Avatar> getAllAvatars(Integer pageNumber, Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        return avatarRepository.findAll(pageRequest).getContent();
     }
 
     @Override
