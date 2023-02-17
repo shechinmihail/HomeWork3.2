@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class AvatarServiceImpl implements AvatarService {
     private final StudentServiceImpl studentService;
     private final AvatarRepository avatarRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     public AvatarServiceImpl(StudentServiceImpl studentService, AvatarRepository avatarRepository) {
         this.studentService = studentService;
         this.avatarRepository = avatarRepository;
@@ -34,8 +38,8 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void upLoadAvatar(Long studentId, MultipartFile file) throws IOException {
+        logger.info("Вызван метод для сохранения нового изображения");
         Student student = studentService.findStudent(studentId);
-
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(file.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -58,10 +62,12 @@ public class AvatarServiceImpl implements AvatarService {
     }
 
     private String getExtension(String filename) {
+        logger.info("Вызван метод для получения нового изображения");
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
 
     private byte[] generateImageData(Path filePath) throws IOException {
+        logger.info("Вызван метод преобразования изображения");
         try (InputStream is = Files.newInputStream(filePath);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
@@ -80,23 +86,27 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public Avatar downLoadAvatar(Long studentId) {
+        logger.info("Вызван метод поиска аватара по id");
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
     @Transactional
     @Override
     public Collection<Avatar> getAllAvatars(Integer pageNumber, Integer pageSize) {
+        logger.info("Вызван метод ограниченного списка аватаров");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
 
     @Override
     public Avatar editAvatar(Avatar avatar) {
+        logger.info("Вызван метод редактирования аватара");
         return avatarRepository.save(avatar);
     }
 
     @Override
     public void deleteAvatar(Long id) {
+        logger.info("Вызван метод для удаления аватара");
         avatarRepository.deleteById(id);
     }
 }
