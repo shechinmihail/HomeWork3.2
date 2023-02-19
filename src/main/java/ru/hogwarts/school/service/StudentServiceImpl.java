@@ -11,6 +11,7 @@ import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @Service
@@ -74,18 +75,43 @@ public class StudentServiceImpl implements StudentService {
         return facultyRepository.findByStudentsId(id);
     }
 
+    @Override
     public Integer getCount() {
         logger.info("Вызван метод подсчета студентов в базе данных");
         return studentRepository.getCount();
     }
 
+    @Override
     public Double gatAverageAge() {
         logger.info("Вызван метод подсчета среднего возраста учащихся");
         return studentRepository.getAverageAge();
     }
 
+    @Override
     public List<Student> getLastFiveStudents() {
         logger.info("Вызван метод для отображения последних пяти студентов в базе данных");
         return studentRepository.getLastFiveStudents();
     }
+
+    @Override
+    public Stream<String> getWithNamesBeginsWithA() {
+        logger.info("Вызван метод для отображения списка студентов, чье имя начинается с буквы А");
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(s -> s.startsWith("А"))
+                .sorted();
+    }
+
+    @Override
+    public Double findStudentAverageAge() {
+        logger.info("Вызван метод подсчета среднего возраста учащихся");
+        return studentRepository.findAll()
+                .stream()
+                .mapToDouble(Student::getAge)
+                .average()
+                .orElseThrow();
+    }
+
+
 }

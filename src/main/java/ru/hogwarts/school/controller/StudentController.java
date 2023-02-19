@@ -9,6 +9,7 @@ import ru.hogwarts.school.service.StudentServiceImpl;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("student")
@@ -76,13 +77,23 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getCount());
     }
 
-    @GetMapping(path = "/average-age")  //GET http://localhost:8080/student/average-age
+    @GetMapping(path = "/averageage")  //GET http://localhost:8080/student/average-age
     public ResponseEntity<Double> getStudentsAverageAge() {
         return ResponseEntity.ok(studentService.gatAverageAge());
     }
 
-    @GetMapping(path = "/last-five-students")  //GET http://localhost:8080/student/last-five-students
+    @GetMapping(path = "/lastfivestudents")  //GET http://localhost:8080/student/last-five-students
     public ResponseEntity<List<Student>> getLastFiveStudents() {
         return ResponseEntity.ok(studentService.getLastFiveStudents());
+    }
+
+    @GetMapping(path = "/thenamebeginswithA")  //GET http://localhost:8080/student/the-name-begins-with-A
+    public ResponseEntity<Stream<String>> getStudentsWhomNamesBeginsWithA() {
+        return ResponseEntity.ok(studentService.getWithNamesBeginsWithA());
+    }
+
+    @GetMapping(path = "/findStudentAverageAge")  //GET http://localhost:8080/student/findStudentAverageAge
+    public ResponseEntity<Double> findStudentAverageAge() {
+        return ResponseEntity.ok(studentService.findStudentAverageAge());
     }
 }

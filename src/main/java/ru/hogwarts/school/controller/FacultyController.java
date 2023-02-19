@@ -63,4 +63,9 @@ public class FacultyController {
     public ResponseEntity<Collection<Student>> getStudentsByFaculty(@PathVariable long id) {
         return ResponseEntity.ok(facultyService.findStudentsById(id));
     }
+
+    @GetMapping("/findTheLongestFacultyName") //GET http://localhost:8080/faculty/findTheLongestFacultyName
+    public String findTheLongestFacultyName(){
+        return facultyService.findTheLongestFacultyName();
+    }
 }

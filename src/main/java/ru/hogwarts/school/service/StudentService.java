@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Student;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface StudentService {
 
@@ -29,4 +30,8 @@ public interface StudentService {
     Double gatAverageAge();
 
     List<Student> getLastFiveStudents();
+
+    Stream<String> getWithNamesBeginsWithA();
+
+    Double findStudentAverageAge();
 }
