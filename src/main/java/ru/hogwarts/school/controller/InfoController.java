@@ -27,7 +27,6 @@ public class InfoController {
         return ResponseEntity.ok(infoService.portNumber());
     }
 
-
     @GetMapping(path = "/getValue")   //GET http://localhost:8080/getValue
     public ResponseEntity<Integer> getValue() {
         long startTime = System.currentTimeMillis();
@@ -40,4 +39,15 @@ public class InfoController {
 
         return ResponseEntity.ok(sum);
     }
+
+    @GetMapping("/printStudents")
+    public void printStudents() {
+        infoService.printStudents();
+    }
+
+    @GetMapping("/studentsFromStreams")
+    public void studentsFromStreams() {
+        infoService.studentsFromStreams();
+    }
+
 }
